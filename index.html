@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FMP Scraper</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>FMP Scraper</h1>
+        <div class="api-key-container">
+            <input type="text" id="apiKey" placeholder="Enter your FMP API Key">
+            <button id="saveApiKey">Save API Key</button>
+        </div>
+        <form id="ratioForm">
+            <input type="text" id="ticker" name="ticker" placeholder="Enter stock ticker" required>
+            
+            <div class="ratio-category">
+                <h2>Profitability Ratios</h2>
+                <div class="ratio-item"><input type="checkbox" id="returnOnEquity" name="ratios" value="returnOnEquity"><label for="returnOnEquity">Return on Equity (ROE)</label></div>
+                <div class="ratio-item"><input type="checkbox" id="returnOnAssets" name="ratios" value="returnOnAssets"><label for="returnOnAssets">Return on Assets (ROA)</label></div>
+                <div class="ratio-item"><input type="checkbox" id="grossProfitMargin" name="ratios" value="grossProfitMargin"><label for="grossProfitMargin">Gross Profit Margin</label></div>
+                <div class="ratio-item"><input type="checkbox" id="operatingProfitMargin" name="ratios" value="operatingProfitMargin"><label for="operatingProfitMargin">Operating Profit Margin</label></div>
+                <div class="ratio-item"><input type="checkbox" id="netProfitMargin" name="ratios" value="netProfitMargin"><label for="netProfitMargin">Net Profit Margin</label></div>
+            </div>
+
+            <div class="ratio-category">
+                <h2>Liquidity Ratios</h2>
+                <div class="ratio-item"><input type="checkbox" id="currentRatio" name="ratios" value="currentRatio"><label for="currentRatio">Current Ratio</label></div>
+                <div class="ratio-item"><input type="checkbox" id="quickRatio" name="ratios" value="quickRatio"><label for="quickRatio">Quick Ratio</label></div>
+            </div>
+
+            <div class="ratio-category">
+                <h2>Solvency Ratios</h2>
+                <div class="ratio-item"><input type="checkbox" id="debtEquityRatio" name="ratios" value="debtEquityRatio"><label for="debtEquityRatio">Debt to Equity Ratio</label></div>
+                <div class="ratio-item"><input type="checkbox" id="interestCoverage" name="ratios" value="interestCoverage"><label for="interestCoverage">Interest Coverage</label></div>
+            </div>
+
+            <div class="ratio-category">
+                <h2>Efficiency Ratios</h2>
+                <div class="ratio-item"><input type="checkbox" id="assetTurnover" name="ratios" value="assetTurnover"><label for="assetTurnover">Asset Turnover</label></div>
+                <div class="ratio-item"><input type="checkbox" id="inventoryTurnover" name="ratios" value="inventoryTurnover"><label for="inventoryTurnover">Inventory Turnover</label></div>
+            </div>
+
+            <button type="submit">Get Ratios</button>
+        </form>
+        <div id="results"></div>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+</html>
