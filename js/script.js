@@ -60,7 +60,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const ticker = document.getElementById('ticker').value.toUpperCase();
         const selectedItems = Array.from(document.querySelectorAll('input[name="ratios"]:checked')).map(el => el.value);
         const frequency = document.querySelector('.ticker.frequency-choice span').textContent.toLowerCase();
-        const timeRange = document.querySelector('.ticker.time-range span').textContent.split(' ')[0];
+        const originalTimeRange = document.querySelector('.ticker.time-range span').textContent.split(' ')[0];
+        let timeRange = originalTimeRange;
+        
+        // Adjust timeRange for quarterly data
+        if (frequency === 'quarterly') {
+            timeRange = parseInt(timeRange) * 4;
+        }
         
         if (selectedItems.length === 0) {
             alert('Please select at least one item.');
@@ -142,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
             // Prepare CSV and HTML content
             let csvContent = headers.join(',') + '\n';
-            let htmlContent = `<h2>Selected Data for ${ticker} (${frequency}, ${timeRange} years)</h2><table><tr>${headers.map(header => `<th>${header}</th>`).join('')}</tr>`;
+            let htmlContent = `<h2>Selected Data for ${ticker} (${frequency}, ${originalTimeRange} years)</h2><table><tr>${headers.map(header => `<th>${header}</th>`).join('')}</tr>`;
     
             data.forEach(row => {
                 let rowData = headers.map(header => row[header] || 'N/A');
@@ -158,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const url = URL.createObjectURL(blob);
             const downloadLink = document.createElement('a');
             downloadLink.href = url;
-            downloadLink.download = `${ticker}_${frequency}_${timeRange}yr_data.csv`;
+            downloadLink.download = `${ticker}_${frequency}_${originalTimeRange}yr_data.csv`;
             downloadLink.textContent = 'Download CSV';
             downloadLink.className = 'download-btn';
             resultsDiv.appendChild(downloadLink);
