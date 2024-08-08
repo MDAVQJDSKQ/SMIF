@@ -1,29 +1,33 @@
+/* General body styling */
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 20px;
-    background-color: #1e1e1e;
-    color: #e0e0e0;
+    background-color: #f0f2f5;
+    color: #333;
     line-height: 1.6;
 }
 
+/* Container styling */
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    background-color: #2d2d2d;
+    background-color: #ffffff;
     border-radius: 8px;
     padding: 30px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Header styling */
 h1 {
-    color: #4fc3f7;
+    color: #2c3e50;
     text-align: center;
     margin-bottom: 30px;
     font-size: 2.5em;
     font-weight: 700;
 }
 
+/* API key input and button styling */
 .api-key-container {
     display: flex;
     margin-bottom: 20px;
@@ -32,17 +36,17 @@ h1 {
 #apiKey {
     flex-grow: 1;
     padding: 10px;
-    border: 1px solid #4fc3f7;
+    border: 1px solid #dcdde1;
     border-radius: 4px 0 0 4px;
     font-size: 16px;
-    background-color: #3d3d3d;
-    color: #e0e0e0;
+    background-color: #f5f6fa;
+    color: #333;
 }
 
 #saveApiKey {
     padding: 10px 20px;
-    background-color: #4fc3f7;
-    color: #1e1e1e;
+    background-color: #3498db;
+    color: #ffffff;
     border: none;
     border-radius: 0 4px 4px 0;
     cursor: pointer;
@@ -51,29 +55,76 @@ h1 {
 }
 
 #saveApiKey:hover {
-    background-color: #03a9f4;
+    background-color: #2980b9;
 }
 
+/* Form and input styling */
 #ratioForm {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
 }
 
+.input-row {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#ticker, .ticker {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #dcdde1;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: #f5f6fa;
+    color: #333;
+}
+
+/* Dropdown styling */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.data-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100%;
+}
+
+/* Ratio category styling */
 .ratio-category {
     flex: 1 1 300px;
     margin-bottom: 20px;
-    border: 1px solid #4fc3f7;
+    border: 1px solid #dcdde1;
     padding: 15px;
     border-radius: 4px;
-    background-color: #3d3d3d;
+    background-color: #ffffff;
 }
 
 .ratio-category h2 {
     margin-top: 0;
-    color: #4fc3f7;
+    color: #2c3e50;
     font-size: 1.2em;
-    border-bottom: 2px solid #4fc3f7;
+    border-bottom: 2px solid #3498db;
     padding-bottom: 5px;
     margin-bottom: 15px;
     font-weight: 700;
@@ -91,50 +142,51 @@ label {
     cursor: pointer;
 }
 
-#ticker {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #4fc3f7;
-    border-radius: 4px;
-    font-size: 16px;
-    background-color: #3d3d3d;
-    color: #e0e0e0;
+/* Button styling for both submit and csv buttons */
+.button-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    width: 100%; 
+    justify-content: center;
 }
 
-button[type="submit"] {
-    display: block;
-    width: 100%;
+button[type="submit"],
+button[type="csv"] {
+    flex: 1;
     padding: 10px;
-    background-color: #4fc3f7;
-    color: #1e1e1e;
+    background-color: #3498db;
+    color: #ffffff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
     transition: background-color 0.3s;
-    margin-top: 20px;
 }
 
-button[type="submit"]:hover {
-    background-color: #03a9f4;
+button[type="submit"]:hover,
+button[type="csv"]:hover {
+    background-color: #2980b9;
 }
 
+/* Results styling */
 #results {
     margin-top: 20px;
     padding: 15px;
-    border: 1px solid #4fc3f7;
+    border: 1px solid #dcdde1;
     border-radius: 4px;
-    background-color: #3d3d3d;
+    background-color: #ffffff;
 }
 
+/* Input focus styling */
 input[type="text"]:focus {
     outline: none;
-    border-color: #03a9f4;
-    box-shadow: 0 0 5px rgba(3, 169, 244, 0.5);
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
 }
 
+/* Responsive design for smaller screens */
 @media (max-width: 768px) {
     .container {
         padding: 15px;
@@ -153,5 +205,14 @@ input[type="text"]:focus {
     
     .ratio-category {
         flex: 1 1 100%;
+    }
+    
+    .input-row {
+        flex-direction: column;
+    }
+    
+    #ticker, .ticker {
+        width: 100%;
+        margin-bottom: 10px;
     }
 }
