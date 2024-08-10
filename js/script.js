@@ -57,6 +57,14 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Please save your API key first.');
             return;
         }
+        resultsDiv.innerHTML = ''; // Clear previous results
+
+        // Create button container
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'button-container';
+
+        // Add button container to results div
+        resultsDiv.appendChild(buttonContainer);
     
         const ticker = document.getElementById('ticker').value.toUpperCase();
         const selectedItems = Array.from(document.querySelectorAll('input[name="ratios"]:checked')).map(el => el.value);
@@ -74,7 +82,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
     
-        resultsDiv.innerHTML = '<p>Loading...</p>';
+        const loadingP = document.createElement('p');
+        loadingP.textContent = 'Loading...';
+        resultsDiv.appendChild(loadingP);
     
         try {
             let data = [];
@@ -174,7 +184,11 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     
             htmlContent += '</table>';
-            resultsDiv.innerHTML = htmlContent;
+            resultsDiv.innerHTML = ''; // Clear loading message
+            resultsDiv.appendChild(buttonContainer); // Re-add button container
+            const contentDiv = document.createElement('div');
+            contentDiv.innerHTML = htmlContent;
+            resultsDiv.appendChild(contentDiv);
     
             // Create and add download link for CSV file
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -183,8 +197,10 @@ document.addEventListener('DOMContentLoaded', function() {
             downloadLink.href = url;
             downloadLink.download = `${ticker}_${frequency}_${originalTimeRange}yr_data.csv`;
             downloadLink.textContent = 'Download CSV';
-            downloadLink.className = 'download-btn';
-            resultsDiv.appendChild(downloadLink);
+            downloadLink.className = 'action-button';
+            buttonContainer.appendChild(downloadLink);
+
+
     
         } catch (error) {
             console.error('Error:', error);
