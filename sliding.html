@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sliding Correlation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="index.html">FMP Scraper</a></li>
+                <li><a href="sliding.html" class="active">Sliding Correlation</a></li>
+            </ul>
+        </nav>
+
+        <h1>Sliding Correlation</h1>
+
+        <form id="slidingCorrelationForm">
+            <div class="input-row">
+                <input type="file" id="fileUpload" accept=".csv" required>
+            </div>
+            <div class="input-row">
+                <input type="number" id="windowSize" min="1" step="1" placeholder="Enter window size (positive integer)" required>
+            </div>
+            <div class="button-row">
+                <button type="submit">Calculate Correlation</button>
+            </div>
+        </form>
+
+        <div id="results"></div>
+    </div>
+    <script src="js/sliding.js"></script>
+</body>
+</html>
