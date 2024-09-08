@@ -1,0 +1,277 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+  color: #2D2926;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.visualizer-form,
+.scraper-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.data-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.ratio-category {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+.ratio-category h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.ratio-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.ratio-item input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+h5 {
+  font-size: 16px;
+  color: #666;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+nav ul li {
+  margin: 0 15px 10px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #2D2926;
+  font-weight: bold;
+  font-size: 18px;
+  transition: color 0.3s;
+}
+
+nav ul li a:hover {
+  color: #ffdd80;
+}
+
+.api-key-container {
+  display: flex;
+  margin-bottom: 20px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#apiKey {
+  flex: 1 1 200px;
+  padding: 10px;
+  border: 1px solid #dcdde1;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #fff;
+}
+
+#saveApiKey {
+  padding: 10px 20px;
+  background-color: #2D2926;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+#saveApiKey:hover {
+  background-color: #ffdd80;
+  color: #2D2926;
+}
+
+#ratioForm {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.input-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+#ticker, .ticker, select, .time-range-input input {
+  flex: 1;
+  min-width: 120px;
+  padding: 10px;
+  border: 1px solid #dcdde1;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #fff;
+}
+
+.time-range-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.time-range-input span {
+  font-size: 16px;
+  color: #2D2926;
+}
+
+.data-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.ratio-category {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.ratio-category h2 {
+  font-size: 18px;
+  color: #2D2926;
+  margin-top: 0;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #ffdd80;
+  padding-bottom: 5px;
+}
+
+button[type="submit"] {
+  background-color: #2D2926;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+  background-color: #ffdd80;
+  color: #2D2926;
+}
+
+.error-message {
+  background-color: #e74c3c;
+  color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 20px;
+}
+
+#results {
+  margin-top: 30px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.chart-container {
+  height: 400px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #ffdd80;
+  color: #2D2926;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .input-row {
+    flex-direction: column;
+  }
+
+  #ticker, .ticker, select, .time-range-input input {
+    width: 100%;
+  }
+}
+
+.financial-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.chart-section {
+  height: 400px;
+}
+
+.table-section {
+  overflow-x: auto;
+}
