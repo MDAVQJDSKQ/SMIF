@@ -92,6 +92,7 @@ function VisualizerDataCategories({ selectedRatios, handleCheckboxChange }) {
                 value={ratio.id}
                 checked={selectedRatios.includes(ratio.id)}
                 onChange={handleCheckboxChange}
+                disabled={selectedRatios.length >= 5 && !selectedRatios.includes(ratio.id)}
               />
               <label htmlFor={ratio.id}>{ratio.label}</label>
             </div>

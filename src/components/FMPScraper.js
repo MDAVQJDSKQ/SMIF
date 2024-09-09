@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import ApiKeyInput from './ApiKeyInput';
 import DataCategories from './DataCategories';
 import Results from './Results';
-import { fetchData, processData } from '../utils/api';
+import { fetchData } from '../utils/api';
+import { processData } from '../utils/dataProcessing';
 
 function FMPScraper() {
     const [selectedRatios, setSelectedRatios] = useState([]);

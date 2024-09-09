@@ -9,17 +9,39 @@ function FinancialChart() {
   const { chartData } = useContext(AppContext);
   const colorScheme = ['#ffdd80', '#2D2926', '#7F8180', '#A0A2A0', '#B2B4B2'];
 
-  if (!chartData || Object.keys(chartData).length === 0) {
-    return <div>No data available for chart</div>;
-  }
+  console.log('Chart data in FinancialChart:', chartData);
 
   const data = {
-    labels: Object.keys(chartData)[0] ? chartData[Object.keys(chartData)[0]].map(item => item.date) : [],
-    datasets: Object.entries(chartData).map(([key, value], index) => ({
-      label: key,
-      data: value.map(item => item[key]),
-      backgroundColor: colorScheme[index % colorScheme.length],
-    })),
+    labels: [],
+    datasets: []
+  };
+
+  if (chartData && Object.keys(chartData).length > 0) {
+    const firstRatio = Object.keys(chartData)[0];
+    data.labels = chartData[firstRatio].map(item => item.date).reverse();
+
+    Object.entries(chartData).forEach(([key, value], index) => {
+      console.log(`Processing ${key}:`, value);
+      const dataPoints = value.map(item => item.value).reverse();
+      console.log(`Data points for ${key}:`, dataPoints);
+      data.datasets.push({
+        label: key,
+        data: dataPoints,
+        backgroundColor: colorScheme[index % colorScheme.length],
+      });
+    });
+  }
+
+  console.log('Processed chart data:', data);
+
+  const formatYAxisTick = (value) => {
+    if (Math.abs(value) >= 1e9) {
+      return '$' + (value / 1e9).toFixed(1) + 'B';
+    } else if (Math.abs(value) >= 1e6) {
+      return '$' + (value / 1e6).toFixed(1) + 'M';
+    } else {
+      return '$' + value.toFixed(0);
+    }
   };
 
   const options = {
@@ -27,6 +49,9 @@ function FinancialChart() {
     scales: {
       y: {
         beginAtZero: true,
+        ticks: {
+          callback: formatYAxisTick
+        }
       },
     },
   };

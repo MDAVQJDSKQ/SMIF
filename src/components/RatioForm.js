@@ -25,6 +25,13 @@ function RatioForm() {
 			));
 			const processedData = data.map((d, i) => processData(selectedRatios[i], d));
 			setTableData(processedData);
+			setChartData(prev => {
+				const newData = {...prev};
+				selectedRatios.forEach((ratio, index) => {
+					newData[ratio] = processedData[index];
+				});
+				return newData;
+			});
 		} catch (error) {
 			console.error('Error fetching data:', error);
 			alert('An error occurred while fetching data. Please try again.');
@@ -34,25 +41,60 @@ function RatioForm() {
 	const handleCheckboxChange = async (e) => {
 		const item = e.target.value;
 		const isChecked = e.target.checked;
+		console.log(`Checkbox changed: ${item}, isChecked: ${isChecked}`);
 
-		if (isChecked) {
-			setSelectedRatios(prev => [...prev, item]);
-			try {
-				const apiKey = localStorage.getItem('fmpApiKey');
-				const data = await fetchData(item, ticker, frequency.toLowerCase(), timeRange.split(' ')[0], apiKey);
-				const processedData = processData(item, data);
-				setChartData(prev => ({...prev, [item]: processedData}));
-			} catch (error) {
-				console.error('Error fetching data:', error);
-				alert('An error occurred while fetching data. Please try again.');
-			}
-		} else {
-			setSelectedRatios(prev => prev.filter(ratio => ratio !== item));
+		if (isChecked && selectedRatios.length < 5) {
+			setSelectedRatios(prev => {
+				console.log(`Adding ${item} to selectedRatios`);
+				return [...prev, item];
+			});
+			console.log(`Fetching data for ${item}`);
+			await fetchDataAndUpdateChart(ticker, timeRange.split(' ')[0], [item]);
+		} else if (!isChecked) {
+			setSelectedRatios(prev => {
+				console.log(`Removing ${item} from selectedRatios`);
+				return prev.filter(ratio => ratio !== item);
+			});
 			setChartData(prev => {
+				console.log(`Removing ${item} from chartData`);
 				const newData = {...prev};
 				delete newData[item];
 				return newData;
 			});
+		} else {
+			alert('You can select up to 5 variables.');
+		}
+	};
+
+	const fetchDataAndUpdateChart = async (ticker, years, selectedRatios) => {
+		console.log(`fetchDataAndUpdateChart called with: ticker=${ticker}, years=${years}, selectedRatios=${selectedRatios}`);
+		const apiKey = localStorage.getItem('fmpApiKey');
+		if (!apiKey) {
+			alert('Please enter your API key first.');
+			return;
+		}
+
+		try {
+			const data = await Promise.all(selectedRatios.map(item => 
+				fetchData(item, ticker, frequency.toLowerCase(), years, apiKey)
+			));
+			console.log(`Data fetched:`, data);
+			setChartData(prev => {
+				const newData = {...prev};
+				selectedRatios.forEach((ratio, index) => {
+					console.log(`Processing data for ${ratio}:`, data[index]);
+					newData[ratio] = data[index].map(item => ({
+						date: item.date,
+						value: item[ratio] || item.value || 0
+					}));
+					console.log(`Processed data for ${ratio}:`, newData[ratio]);
+				});
+				console.log(`New chartData:`, newData);
+				return newData;
+			});
+		} catch (error) {
+			console.error('Error fetching data:', error);
+			alert('An error occurred while fetching data. Please try again.');
 		}
 	};
 

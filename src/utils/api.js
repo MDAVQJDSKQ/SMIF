@@ -9,21 +9,35 @@ export async function fetchData(item, ticker, frequency, timeRange, apiKey) {
     }
 
     let endpoint;
+    let dataField = item;
+
+    const incomeStatementItems = ['revenue', 'costOfRevenue', 'grossProfit', 'operatingIncome', 'netIncome'];
+    const balanceSheetItems = ['totalAssets', 'totalLiabilities', 'totalEquity', 'cashAndCashEquivalents', 'totalDebt'];
+    const cashFlowItems = ['operatingCashFlow', 'capitalExpenditure', 'freeCashFlow', 'dividendsPaid', 'netCashUsedForInvestingActivites'];
+
+    if (incomeStatementItems.includes(item)) {
+        endpoint = 'income-statement';
+    } else if (balanceSheetItems.includes(item)) {
+        endpoint = 'balance-sheet-statement';
+    } else if (cashFlowItems.includes(item)) {
+        endpoint = 'cash-flow-statement';
+    } else {
+        endpoint = 'ratios';
+    }
+
     switch (item) {
-        case 'incomeStatement':
-        case 'incomeStatementCondensed':
-            endpoint = 'income-statement';
+        case 'debtToEquityRatio':
+            dataField = 'debtEquityRatio';
             break;
-        case 'balanceSheet':
-        case 'balanceSheetCondensed':
-            endpoint = 'balance-sheet-statement';
+        case 'interestCoverageRatio':
+            dataField = 'interestCoverage';
             break;
-        case 'cashFlow':
-        case 'cashFlowCondensed':
-            endpoint = 'cash-flow-statement';
+        case 'earningsPerShare':
+            dataField = 'eps';
             break;
-        default:
-            endpoint = 'ratios';
+        case 'priceToEarningsRatio':
+            dataField = 'peRatio';
+            break;
     }
 
     const url = `${API_BASE_URL}/${endpoint}/${ticker}?period=${frequency}&limit=${timeRange}&apikey=${apiKey}`;
@@ -34,8 +48,22 @@ export async function fetchData(item, ticker, frequency, timeRange, apiKey) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        dataCache[cacheKey] = data;
-        return data;
+        
+        let processedData;
+        if (endpoint === 'ratios') {
+            processedData = data.map(entry => ({
+                date: entry.date,
+                value: entry[dataField]
+            }));
+        } else {
+            processedData = data.map(entry => ({
+                date: entry.date,
+                value: entry[dataField]
+            }));
+        }
+        
+        dataCache[cacheKey] = processedData;
+        return processedData;
     } catch (error) {
         console.error('Error:', error);
         throw error;

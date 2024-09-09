@@ -51,15 +51,9 @@ export function calculate_condensed_cash_flow(data) {
 }
 
 export function processData(item, data) {
-    if (item.includes('Condensed')) {
-        switch (item) {
-            case 'incomeStatementCondensed':
-                return data.map(entry => calculate_condensed_income_statement(entry));
-            case 'balanceSheetCondensed':
-                return data.map(entry => calculate_condensed_balance_sheet(entry));
-            case 'cashFlowCondensed':
-                return data.map(entry => calculate_condensed_cash_flow(entry));
-        }
+    if (!Array.isArray(data) || data.length === 0) {
+        return [];
     }
+
     return data;
 }
