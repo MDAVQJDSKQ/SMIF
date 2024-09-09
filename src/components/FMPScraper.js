@@ -40,8 +40,11 @@ function FMPScraper() {
             const data = await Promise.all(selectedRatios.map(item => 
                 fetchData(item, ticker, frequency, years, apiKey)
             ));
-            const processedData = data.map((d, i) => processData(selectedRatios[i], d));
-            // Assuming you have a setResults function or state
+            console.log('Fetched data:', data); // Debug log
+            const processedData = data.map((d, i) => {
+                console.log(`Processing ${selectedRatios[i]}:`, d); // Debug log
+                return processData(selectedRatios[i], d);
+            });
             setResults(processedData);
         } catch (error) {
             console.error('Error fetching data:', error);

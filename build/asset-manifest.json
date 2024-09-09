@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/SMIF/static/css/main.566a527c.css",
+    "main.js": "/SMIF/static/js/main.a3884517.js",
+    "index.html": "/SMIF/index.html",
+    "main.566a527c.css.map": "/SMIF/static/css/main.566a527c.css.map",
+    "main.a3884517.js.map": "/SMIF/static/js/main.a3884517.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.566a527c.css",
+    "static/js/main.a3884517.js"
+  ]
+}

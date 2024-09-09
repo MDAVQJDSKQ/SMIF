@@ -35,28 +35,47 @@ function FinancialChart() {
   console.log('Processed chart data:', data);
 
   const formatYAxisTick = (value) => {
-    if (Math.abs(value) >= 1e9) {
+    const absValue = Math.abs(value);
+    if (absValue >= 1e9) {
       return '$' + (value / 1e9).toFixed(1) + 'B';
-    } else if (Math.abs(value) >= 1e6) {
+    } else if (absValue >= 1e6) {
       return '$' + (value / 1e6).toFixed(1) + 'M';
+    } else if (absValue >= 1e3) {
+      return '$' + (value / 1e3).toFixed(1) + 'K';
+    } else if (absValue >= 1) {
+      return value.toFixed(2);
+    } else if (absValue >= 0.001) {
+      return value.toFixed(3);
+    } else if (absValue > 0) {
+      return value.toExponential(2);
     } else {
-      return '$' + value.toFixed(0);
+      return '0';
     }
   };
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     scales: {
       y: {
         beginAtZero: true,
         ticks: {
-          callback: formatYAxisTick
+          callback: formatYAxisTick,
+          autoSkip: true,
+          maxTicksLimit: 8
+        },
+        afterBuildTicks: (scale) => {
+          scale.ticks = scale.ticks.filter(tick => tick.value !== 0);
         }
       },
     },
   };
 
-  return <Bar data={data} options={options} />;
+  return (
+    <div className="financial-chart">
+      <Bar data={data} options={options} />
+    </div>
+  );
 }
 
 export default FinancialChart;

@@ -18,14 +18,16 @@ function ApiKeyInput() {
   };
 
   return (
-    <div className="api-key-container">
+    <div className="api-key-input">
       <input
         type="text"
         value={apiKey}
         onChange={(e) => setApiKey(e.target.value)}
-        placeholder="Financial Modeling Prep API Key (Starter+)"
+        placeholder="Enter your FMP API Key"
       />
-      <button onClick={handleSaveApiKey}>Save API Key</button>
+      <button onClick={handleSaveApiKey} className="save-api-key-button">
+        Save API Key
+      </button>
     </div>
   );
 }

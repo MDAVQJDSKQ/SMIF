@@ -12,7 +12,7 @@ export async function fetchData(item, ticker, frequency, timeRange, apiKey) {
     let dataField = item;
 
     const incomeStatementItems = ['revenue', 'costOfRevenue', 'grossProfit', 'operatingIncome', 'netIncome'];
-    const balanceSheetItems = ['totalAssets', 'totalLiabilities', 'totalEquity', 'cashAndCashEquivalents', 'totalDebt'];
+    const balanceSheetItems = ['totalAssets', 'totalLiabilities', 'totalEquity', 'cashAndCashEquivalents', 'totalDebt', 'inventory'];
     const cashFlowItems = ['operatingCashFlow', 'capitalExpenditure', 'freeCashFlow', 'dividendsPaid', 'netCashUsedForInvestingActivites'];
 
     if (incomeStatementItems.includes(item)) {
@@ -38,6 +38,19 @@ export async function fetchData(item, ticker, frequency, timeRange, apiKey) {
         case 'priceToEarningsRatio':
             dataField = 'peRatio';
             break;
+        case 'inventoryTurnover':
+            // We'll calculate this manually
+            const incomeStatement = await fetchData('costOfRevenue', ticker, frequency, timeRange, apiKey);
+            const balanceSheet = await fetchData('inventory', ticker, frequency, timeRange, apiKey);
+            const inventoryTurnover = incomeStatement.map((income, index) => {
+                const inventory = balanceSheet[index] ? balanceSheet[index].value : 0;
+                return {
+                    date: income.date,
+                    value: inventory !== 0 ? income.value / inventory : 0
+                };
+            });
+            dataCache[cacheKey] = inventoryTurnover;
+            return inventoryTurnover;
     }
 
     const url = `${API_BASE_URL}/${endpoint}/${ticker}?period=${frequency}&limit=${timeRange}&apikey=${apiKey}`;
@@ -48,24 +61,21 @@ export async function fetchData(item, ticker, frequency, timeRange, apiKey) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        
-        let processedData;
-        if (endpoint === 'ratios') {
-            processedData = data.map(entry => ({
-                date: entry.date,
-                value: entry[dataField]
-            }));
-        } else {
-            processedData = data.map(entry => ({
-                date: entry.date,
-                value: entry[dataField]
-            }));
-        }
-        
+        console.log(`Raw data for ${item}:`, data); // Debug log
+
+        const processedData = data.map(item => {
+            const value = item[dataField];
+            console.log(`Processed ${dataField}:`, value); // Debug log
+            return {
+                date: item.date,
+                value: value
+            };
+        });
+
         dataCache[cacheKey] = processedData;
         return processedData;
     } catch (error) {
         console.error('Error:', error);
-        throw error;
+        return null;
     }
 }

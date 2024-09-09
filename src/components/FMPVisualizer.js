@@ -10,7 +10,7 @@ function FMPVisualizer() {
     const { setChartData } = useContext(AppContext);
     const [selectedRatios, setSelectedRatios] = useState([]);
     const [ticker, setTicker] = useState('');
-    const [years, setYears] = useState(5);
+    const years = 5; // Set a constant value for years
 
     const handleCheckboxChange = async (e) => {
         const item = e.target.value;
@@ -42,13 +42,13 @@ function FMPVisualizer() {
             const data = await Promise.all(selectedRatios.map(item => 
                 fetchData(item, ticker, 'annual', years, apiKey)
             ));
-            console.log('Fetched data:', data); // Log the fetched data
+            console.log('Fetched data:', data);
             setChartData(prev => {
                 const newData = {...prev};
                 selectedRatios.forEach((ratio, index) => {
                     newData[ratio] = data[index];
                 });
-                console.log('Updated chart data:', newData); // Log the updated chart data
+                console.log('Updated chart data:', newData);
                 return newData;
             });
         } catch (error) {
@@ -66,29 +66,27 @@ function FMPVisualizer() {
     return (
         <div className="container">
             <h1>FMP Visualizer</h1>
-            <ApiKeyInput />
-            <div className="visualizer-form">
-                <input
-                    type="text"
-                    value={ticker}
-                    onChange={(e) => setTicker(e.target.value)}
-                    placeholder="Enter stock ticker"
-                    required
-                />
-                <input
-                    type="number"
-                    value={years}
-                    onChange={(e) => setYears(Math.max(1, Math.min(30, parseInt(e.target.value) || 1)))}
-                    min="1"
-                    max="30"
-                    required
-                />
+            <div className="visualizer-container">
+                <div className="visualizer-left">
+                    <ApiKeyInput />
+                    <div className="visualizer-form">
+                        <input
+                            type="text"
+                            value={ticker}
+                            onChange={(e) => setTicker(e.target.value)}
+                            placeholder="Enter stock ticker"
+                            required
+                        />
+                    </div>
+                    <VisualizerDataCategories 
+                        selectedRatios={selectedRatios}
+                        handleCheckboxChange={handleCheckboxChange}
+                    />
+                </div>
+                <div className="visualizer-right">
+                    <FinancialChart />
+                </div>
             </div>
-            <VisualizerDataCategories 
-                selectedRatios={selectedRatios}
-                handleCheckboxChange={handleCheckboxChange}
-            />
-            <FinancialChart />
         </div>
     );
 }
