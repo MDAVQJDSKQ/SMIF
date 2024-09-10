@@ -6,33 +6,44 @@ function Results() {
 
     if (tableData.length === 0) return null;
 
-    // Process tableData to create HTML content and CSV content
-    // This part depends on how you want to display the data
-    // For now, I'll just display it as a simple table
+    const columns = Object.keys(tableData[0]).filter(key => key !== 'date');
+
+    const formatValue = (value) => {
+        if (typeof value === 'number') {
+            return value.toLocaleString(undefined, { maximumFractionDigits: 2 });
+        } else if (value === undefined || value === null) {
+            return 'N/A';
+        } else {
+            return value.toString();
+        }
+    };
 
     return (
         <div id="results">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        {Object.keys(tableData[0]).filter(key => key !== 'date').map(key => (
-                            <th key={key}>{key}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {tableData.map((row, index) => (
-                        <tr key={index}>
-                            <td>{row.date}</td>
-                            {Object.entries(row).filter(([key]) => key !== 'date').map(([key, value]) => (
-                                <td key={key}>{value}</td>
+            <div className="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th className="sticky-col">Ratio / Date</th>
+                            {tableData.map(row => (
+                                <th key={row.date}>{row.date}</th>
                             ))}
                         </tr>
-                    ))}
-                </tbody>
-            </table>
-            {/* Add CSV download button here */}
+                    </thead>
+                    <tbody>
+                        {columns.map(column => (
+                            <tr key={column}>
+                                <td className="sticky-col">{column}</td>
+                                {tableData.map(row => (
+                                    <td key={`${row.date}-${column}`}>
+                                        {formatValue(row[column])}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }

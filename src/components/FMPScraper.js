@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { AppContext } from '../context/AppContext';
 import ApiKeyInput from './ApiKeyInput';
 import DataCategories from './DataCategories';
 import Results from './Results';
@@ -12,6 +13,8 @@ function FMPScraper() {
     const [frequency, setFrequency] = useState('annual');
     const [results, setResults] = useState([]);
 
+    const { setTableData } = useContext(AppContext);
+
     const handleCheckboxChange = (e) => {
         const item = e.target.value;
         const isChecked = e.target.checked;
@@ -24,9 +27,11 @@ function FMPScraper() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Fetch data and update results
-        // You'll need to implement this function
         fetchDataAndUpdateResults(ticker, years, frequency, selectedRatios);
+    };
+
+    const handleDownloadCSV = () => {
+        // Implement download CSV logic here
     };
 
     const fetchDataAndUpdateResults = async (ticker, years, frequency, selectedRatios) => {
@@ -40,12 +45,29 @@ function FMPScraper() {
             const data = await Promise.all(selectedRatios.map(item => 
                 fetchData(item, ticker, frequency, years, apiKey)
             ));
-            console.log('Fetched data:', data); // Debug log
-            const processedData = data.map((d, i) => {
-                console.log(`Processing ${selectedRatios[i]}:`, d); // Debug log
-                return processData(selectedRatios[i], d);
-            });
-            setResults(processedData);
+            console.log('Fetched data:', data);
+            const processedData = selectedRatios.reduce((acc, ratio, index) => {
+                const ratioData = data[index];
+                if (Array.isArray(ratioData)) {
+                    ratioData.forEach(item => {
+                        const date = item.date;
+                        if (!acc[date]) acc[date] = { date };
+                        if (ratio.includes('Statement') || ratio.includes('Sheet')) {
+                            Object.entries(item).forEach(([key, value]) => {
+                                if (key !== 'date') {
+                                    acc[date][`${ratio}_${key}`] = value;
+                                }
+                            });
+                        } else {
+                            acc[date][ratio] = item[ratio] || item.value;
+                        }
+                    });
+                }
+                return acc;
+            }, {});
+            const tableData = Object.values(processedData).sort((a, b) => new Date(b.date) - new Date(a.date));
+            setResults(tableData);
+            setTableData(tableData);
         } catch (error) {
             console.error('Error fetching data:', error);
             alert('An error occurred while fetching data. Please try again.');
@@ -54,38 +76,57 @@ function FMPScraper() {
 
     return (
         <div className="container">
-            <h1>FMP Scraper</h1>
-            <ApiKeyInput />
-            <form onSubmit={handleSubmit} className="scraper-form">
-                <input
-                    type="text"
-                    value={ticker}
-                    onChange={(e) => setTicker(e.target.value)}
-                    placeholder="Enter stock ticker"
-                    required
-                />
-                <input
-                    type="number"
-                    value={years}
-                    onChange={(e) => setYears(Math.max(1, Math.min(30, parseInt(e.target.value) || 1)))}
-                    min="1"
-                    max="30"
-                    required
-                />
-                <select
-                    value={frequency}
-                    onChange={(e) => setFrequency(e.target.value)}
-                >
-                    <option value="annual">Annual</option>
-                    <option value="quarterly">Quarterly</option>
-                </select>
-                <button type="submit">Scrape Data</button>
-            </form>
-            <DataCategories 
-                selectedRatios={selectedRatios} 
-                handleCheckboxChange={handleCheckboxChange}
-            />
-            <Results selectedRatios={selectedRatios} />
+            <div className="scraper-content">
+                <div className="scraper-header">
+                    <h1>FMP Scraper</h1>
+                    <h5>Data provided by Financial Modeling Prep</h5>
+                </div>
+                <div className="scraper-container">
+                    <div className="scraper-left">
+                        <div className="api-section">
+                            <ApiKeyInput />
+                            <div className="ticker-input">
+                                <input
+                                    type="text"
+                                    value={ticker}
+                                    onChange={(e) => setTicker(e.target.value)}
+                                    placeholder="Enter stock ticker"
+                                    required
+                                />
+                            </div>
+                            <div className="time-frequency-input">
+                                <input
+                                    type="number"
+                                    value={years}
+                                    onChange={(e) => setYears(Math.max(1, Math.min(30, parseInt(e.target.value) || 1)))}
+                                    min="1"
+                                    max="30"
+                                    placeholder="Years"
+                                    required
+                                />
+                                <select
+                                    value={frequency}
+                                    onChange={(e) => setFrequency(e.target.value)}
+                                >
+                                    <option value="annual">Annual</option>
+                                    <option value="quarterly">Quarterly</option>
+                                </select>
+                            </div>
+                        </div>
+                        <DataCategories 
+                            selectedRatios={selectedRatios} 
+                            handleCheckboxChange={handleCheckboxChange}
+                        />
+                    </div>
+                    <div className="scraper-right">
+                        <div className="scraper-actions">
+                            <button onClick={handleSubmit}>Scrape Data</button>
+                            <button onClick={handleDownloadCSV}>Download CSV</button>
+                        </div>
+                        <Results />
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

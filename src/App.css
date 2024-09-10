@@ -13,7 +13,13 @@ body {
 }
 
 h1 {
-  font-size: 24px;
+  font-size: 28px; 
+  margin-bottom: 10px;
+}
+
+h5 {
+  font-size: 14px;
+  color: #666;
   margin-bottom: 20px;
 }
 
@@ -70,14 +76,6 @@ button:hover {
 
 .ratio-item input[type="checkbox"] {
   margin-right: 5px;
-}
-
-h5 {
-  font-size: 16px;
-  color: #666;
-  text-align: center;
-  margin-top: 0;
-  margin-bottom: 20px;
 }
 
 nav ul {
@@ -229,26 +227,44 @@ button[type="submit"]:hover {
   overflow: hidden;
 }
 
-.chart-container {
-  width: 100%;
-  height: 100%;
+.table-wrapper {
+  overflow-x: auto;
+  max-width: 100%;
 }
 
 table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 th, td {
   padding: 12px;
   text-align: left;
   border-bottom: 1px solid #ddd;
+  white-space: nowrap;
 }
 
 th {
   background-color: #ffdd80;
   color: #2D2926;
   font-weight: bold;
+}
+
+.sticky-col {
+  position: sticky;
+  left: 0;
+  background-color: #fff;
+  z-index: 1;
+}
+
+th.sticky-col {
+  background-color: #ffdd80;
+}
+
+.chart-container {
+  width: 100%;
+  height: 100%;
 }
 
 @media (max-width: 768px) {
@@ -299,24 +315,22 @@ th {
   display: flex;
   flex-direction: row;
   gap: 20px;
-  height: calc(100vh - 150px);
+  height: calc(100vh - 140px);
   max-width: 100%;
-  padding: 0 20px;
+  padding: 0;
 }
 
 .visualizer-left {
   flex: 0 0 250px;
   min-width: 250px;
   overflow-y: auto;
-  max-height: calc(100vh - 150px);
+  max-height: calc(100vh - 140px);
 }
 
 .visualizer-right {
   flex: 1;
   min-width: 300px;
-  height: calc(100vh - 150px);
-  position: sticky;
-  top: 20px;
+  height: calc(100vh - 140px);
 }
 
 .chart-container {
@@ -345,4 +359,178 @@ th {
 .financial-chart {
   width: 100%;
   height: 100%;
+}
+
+.api-section {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.api-key-input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.api-key-input input,
+.ticker-input input,
+.save-api-key-button {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.save-api-key-button {
+  background-color: #ffdd80;
+  color: #2D2926;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.save-api-key-button:hover {
+  background-color: #ffd700;
+}
+
+@media (max-width: 768px) {
+  .visualizer-container {
+    flex-direction: column;
+  }
+
+  .visualizer-left,
+  .visualizer-right {
+    width: 100%;
+  }
+}
+
+.visualizer-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.visualizer-header h1 {
+  margin: 0;
+}
+
+.visualizer-header h5 {
+  margin: 2px 0 0 0;
+  font-size: 12px;
+  color: #888;
+}
+
+.scraper-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.scraper-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.scraper-header h1 {
+  margin: 0;
+}
+
+.scraper-header h5 {
+  margin: 2px 0 0 0;
+  font-size: 12px;
+  color: #888;
+}
+
+.scraper-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  height: calc(100vh - 100px);
+  max-width: 100%;
+  padding: 0;
+}
+
+.scraper-left {
+  flex: 0 0 250px;
+  min-width: 250px;
+  overflow-y: auto;
+  max-height: calc(100vh - 100px);
+}
+
+.scraper-right {
+  flex: 1;
+  min-width: 300px;
+  height: calc(100vh - 140px);
+  overflow-y: auto;
+}
+
+.scraper-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.scraper-actions button {
+  background-color: #2D2926;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  flex: 1;
+}
+
+.scraper-actions button:hover {
+  background-color: #ffdd80;
+  color: #2D2926;
+}
+
+@media (max-width: 1024px) {
+  .scraper-container {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .scraper-left,
+  .scraper-right {
+    width: 100%;
+  }
+
+  .scraper-right {
+    height: auto;
+    max-height: 60vh;
+  }
+}
+
+.time-frequency-input {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.time-frequency-input input,
+.time-frequency-input select {
+  flex: 1;
+  width: 50%;
+}
+
+.scraper-left .api-section > div {
+  margin-bottom: 10px;
+}
+
+.column-search {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }

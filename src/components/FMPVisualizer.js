@@ -10,7 +10,7 @@ function FMPVisualizer() {
     const { setChartData } = useContext(AppContext);
     const [selectedRatios, setSelectedRatios] = useState([]);
     const [ticker, setTicker] = useState('');
-    const years = 5; // Set a constant value for years
+    const years = 5;
 
     const handleCheckboxChange = async (e) => {
         const item = e.target.value;
@@ -65,26 +65,33 @@ function FMPVisualizer() {
 
     return (
         <div className="container">
-            <h1>FMP Visualizer</h1>
-            <div className="visualizer-container">
-                <div className="visualizer-left">
-                    <ApiKeyInput />
-                    <div className="visualizer-form">
-                        <input
-                            type="text"
-                            value={ticker}
-                            onChange={(e) => setTicker(e.target.value)}
-                            placeholder="Enter stock ticker"
-                            required
+            <div className="visualizer-content">
+                <div className="visualizer-header">
+                    <h1>FMP Visualizer</h1>
+                    <h5>Data provided by Financial Modeling Prep</h5>
+                </div>
+                <div className="visualizer-container">
+                    <div className="visualizer-left">
+                        <div className="api-section">
+                            <ApiKeyInput />
+                            <div className="ticker-input">
+                                <input
+                                    type="text"
+                                    value={ticker}
+                                    onChange={(e) => setTicker(e.target.value)}
+                                    placeholder="Enter stock ticker"
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <VisualizerDataCategories 
+                            selectedRatios={selectedRatios}
+                            handleCheckboxChange={handleCheckboxChange}
                         />
                     </div>
-                    <VisualizerDataCategories 
-                        selectedRatios={selectedRatios}
-                        handleCheckboxChange={handleCheckboxChange}
-                    />
-                </div>
-                <div className="visualizer-right">
-                    <FinancialChart />
+                    <div className="visualizer-right">
+                        <FinancialChart />
+                    </div>
                 </div>
             </div>
         </div>
