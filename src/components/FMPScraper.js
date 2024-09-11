@@ -31,7 +31,34 @@ function FMPScraper() {
     };
 
     const handleDownloadCSV = () => {
-        // Implement download CSV logic here
+        if (results.length === 0) {
+            alert('No data to download. Please scrape data first.');
+            return;
+        }
+
+        const headers = ['Item', ...results.map(row => row.date)];
+        let csvContent = headers.join(',') + '\n';
+
+        const transposedData = Object.keys(results[0])
+            .filter(key => key !== 'date')
+            .map(key => {
+                const row = [key, ...results.map(item => item[key] || '')];
+                return row.map(value => typeof value === 'string' ? `"${value}"` : value).join(',');
+            });
+
+        csvContent += transposedData.join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        if (link.download !== undefined) {
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `${ticker}_financial_data.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
     };
 
     const fetchDataAndUpdateResults = async (ticker, years, frequency, selectedRatios) => {
@@ -52,10 +79,10 @@ function FMPScraper() {
                     ratioData.forEach(item => {
                         const date = item.date;
                         if (!acc[date]) acc[date] = { date };
-                        if (ratio.includes('Statement') || ratio.includes('Sheet')) {
+                        if (ratio.includes('Statement') || ratio.includes('Sheet') || ratio.includes('Flow')) {
                             Object.entries(item).forEach(([key, value]) => {
-                                if (key !== 'date') {
-                                    acc[date][`${ratio}_${key}`] = value;
+                                if (key !== 'date' && !['symbol', 'reportedCurrency', 'cik', 'fillingDate', 'acceptedDate', 'calendarYear', 'period', 'link', 'finalLink'].includes(key)) {
+                                    acc[date][key] = value;
                                 }
                             });
                         } else {

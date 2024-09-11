@@ -1,3 +1,5 @@
+import { calculate_condensed_income_statement, calculate_condensed_balance_sheet, calculate_condensed_cash_flow } from './dataProcessing';
+
 const API_BASE_URL = 'https://financialmodelingprep.com/api/v3';
 
 let dataCache = {};
@@ -9,51 +11,18 @@ export async function fetchData(item, ticker, frequency, timeRange, apiKey) {
     }
 
     let endpoint;
-    let dataField = item;
 
-    const incomeStatementItems = ['revenue', 'costOfRevenue', 'grossProfit', 'operatingIncome', 'netIncome'];
-    const balanceSheetItems = ['totalAssets', 'totalLiabilities', 'totalEquity', 'cashAndCashEquivalents', 'totalDebt', 'inventory'];
-    const cashFlowItems = ['operatingCashFlow', 'capitalExpenditure', 'freeCashFlow', 'dividendsPaid', 'netCashUsedForInvestingActivites'];
-
-    if (incomeStatementItems.includes(item)) {
+    if (item.includes('incomeStatement')) {
         endpoint = 'income-statement';
-    } else if (balanceSheetItems.includes(item)) {
+    } else if (item.includes('balanceSheet')) {
         endpoint = 'balance-sheet-statement';
-    } else if (cashFlowItems.includes(item)) {
+    } else if (item.includes('cashFlow')) {
         endpoint = 'cash-flow-statement';
     } else {
         endpoint = 'ratios';
     }
 
-    switch (item) {
-        case 'debtToEquityRatio':
-            dataField = 'debtEquityRatio';
-            break;
-        case 'interestCoverageRatio':
-            dataField = 'interestCoverage';
-            break;
-        case 'earningsPerShare':
-            dataField = 'eps';
-            break;
-        case 'priceToEarningsRatio':
-            dataField = 'peRatio';
-            break;
-        case 'inventoryTurnover':
-            // We'll calculate this manually
-            const incomeStatement = await fetchData('costOfRevenue', ticker, frequency, timeRange, apiKey);
-            const balanceSheet = await fetchData('inventory', ticker, frequency, timeRange, apiKey);
-            const inventoryTurnover = incomeStatement.map((income, index) => {
-                const inventory = balanceSheet[index] ? balanceSheet[index].value : 0;
-                return {
-                    date: income.date,
-                    value: inventory !== 0 ? income.value / inventory : 0
-                };
-            });
-            dataCache[cacheKey] = inventoryTurnover;
-            return inventoryTurnover;
-    }
-
-    const url = `${API_BASE_URL}/${endpoint}/${ticker}?period=${frequency}&limit=${timeRange}&apikey=${apiKey}`;
+    const url = `https://financialmodelingprep.com/api/v3/${endpoint}/${ticker}?period=${frequency}&limit=${timeRange}&apikey=${apiKey}`;
 
     try {
         const response = await fetch(url);
@@ -61,21 +30,26 @@ export async function fetchData(item, ticker, frequency, timeRange, apiKey) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(`Raw data for ${item}:`, data); // Debug log
 
-        const processedData = data.map(item => {
-            const value = item[dataField];
-            console.log(`Processed ${dataField}:`, value); // Debug log
-            return {
-                date: item.date,
-                value: value
-            };
-        });
+        if (item.includes('Condensed')) {
+            const condensedData = data.map(entry => {
+                if (item.includes('incomeStatement')) {
+                    return calculate_condensed_income_statement(entry);
+                } else if (item.includes('balanceSheet')) {
+                    return calculate_condensed_balance_sheet(entry);
+                } else if (item.includes('cashFlow')) {
+                    return calculate_condensed_cash_flow(entry);
+                }
+                return entry;
+            });
+            dataCache[cacheKey] = condensedData;
+            return condensedData;
+        }
 
-        dataCache[cacheKey] = processedData;
-        return processedData;
+        dataCache[cacheKey] = data;
+        return data;
     } catch (error) {
-        console.error('Error:', error);
-        return null;
+        console.error('Error fetching data:', error);
+        throw error;
     }
 }
