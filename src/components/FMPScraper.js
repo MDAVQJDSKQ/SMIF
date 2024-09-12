@@ -92,7 +92,7 @@ function FMPScraper() {
                 }
                 return acc;
             }, {});
-            const tableData = Object.values(processedData).sort((a, b) => new Date(b.date) - new Date(a.date));
+            const tableData = Object.values(processedData).sort((a, b) => new Date(a.date) - new Date(b.date));
             setResults(tableData);
             setTableData(tableData);
         } catch (error) {
