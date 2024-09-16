@@ -8,6 +8,7 @@ function Navigation() {
         <li><Link to="/">FMP Visualizer</Link></li>
         <li><Link to="/scraper">FMP Scraper</Link></li>
         <li><Link to="/sliding">Sliding Correlation</Link></li>
+        <li><Link to="/transcript">Transcript Analyzer</Link></li>
       </ul>
     </nav>
   );

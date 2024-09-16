@@ -32,8 +32,10 @@ function FMPVisualizer() {
     };
 
     const fetchDataAndUpdateChart = async (ticker, years, selectedRatios, setChartData) => {
+        console.log('Fetching data for:', ticker, years, selectedRatios);
         const apiKey = localStorage.getItem('fmpApiKey');
         if (!apiKey) {
+            console.error('API key not found');
             alert('Please enter your API key first.');
             return;
         }
@@ -47,6 +49,7 @@ function FMPVisualizer() {
                 const newData = {...prev};
                 selectedRatios.forEach((ratio, index) => {
                     newData[ratio] = data[index];
+                    console.log(`Processed data for ${ratio}:`, newData[ratio]);
                 });
                 console.log('Updated chart data:', newData);
                 return newData;

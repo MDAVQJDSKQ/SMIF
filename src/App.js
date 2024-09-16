@@ -4,6 +4,7 @@ import Navigation from './components/Navigation';
 import FMPVisualizer from './components/FMPVisualizer';
 import FMPScraper from './components/FMPScraper';
 import SlidingCorrelation from './components/SlidingCorrelation';
+import TranscriptAnalyzer from './components/TranscriptAnalyzer';
 import './App.css';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route path="/visualizer" element={<FMPVisualizer />} />
           <Route path="/scraper" element={<FMPScraper />} />
           <Route path="/sliding" element={<SlidingCorrelation />} />
+          <Route path="/transcript" element={<TranscriptAnalyzer />} />
           <Route path="*" element={<Navigate to="/visualizer" replace />} />
         </Routes>
       </div>
